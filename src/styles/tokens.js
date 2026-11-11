@@ -23,3 +23,10 @@ export const status = {
 
 // Categorical palette for charts (colour-blind-safe ordering).
 export const dataviz = ['#1565C0', '#00897B', '#EF6C00', '#7B1FA2', '#C2185B', '#5D4037'];
+
+// One colour family per persona / tour flow so reviewers can tell them apart.
+export const personaTone = {
+  groupAdmin: {fg: '#0F55A5', bg: '#EAF2FB', name: 'blue'},   // Flow 1: Maya
+  practice: {fg: '#00675B', bg: '#E3F4F1', name: 'teal'},     // Flow 2: Rosa
+  payerOps: {fg: '#6A1B9A', bg: '#F3E8F8', name: 'purple'},   // Flow 3: Devon
+};

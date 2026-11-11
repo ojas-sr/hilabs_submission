@@ -22,6 +22,8 @@ import {useDemo} from '../../shared/hooks/useDemoStore';
 import {PERSONAS} from '../../shared/constants';
 import AboutDialog from './AboutDialog';
 import Footer from './Footer';
+import PersonaAvatar from '../ui/PersonaAvatar';
+import {personaTone} from '../../styles/tokens';
 
 const DRAWER_WIDTH = 236;
 const ic = (I) => <I fontSize="small" />;
@@ -101,8 +103,14 @@ export default function AppShell() {
       <Divider sx={{my: 1}} />
       <Box sx={{px: 1.5, py: 1}}>
         <Typography variant="overline" color="text.secondary" component="div">Signed in as (demo)</Typography>
-        <Typography variant="body2" sx={{fontWeight: 500}}>{persona.user}</Typography>
-        <Typography variant="body2" color="text.secondary">{persona.org}</Typography>
+        <Box sx={{display: 'flex', gap: 1, alignItems: 'center', mt: 0.5}}>
+          <PersonaAvatar id={state.persona} size={36} />
+          <Box sx={{minWidth: 0}}>
+            <Typography variant="body2" sx={{fontWeight: 600, color: personaTone[state.persona].fg}}>{persona.user}</Typography>
+            <Typography variant="body2" color="text.secondary">{persona.org}</Typography>
+          </Box>
+        </Box>
+        <Typography variant="caption" color="text.secondary" sx={{display: 'block', mt: 1}}>Switch persona from the menu at the top.</Typography>
       </Box>
     </Box>
   );
@@ -128,7 +136,10 @@ export default function AppShell() {
           >
             {Object.values(PERSONAS).map((p) => (
               <MenuItem key={p.id} value={p.id}>
-                {p.label}{desktop ? ` · ${p.org}` : ''}
+                <Box sx={{display: 'flex', alignItems: 'center', gap: 1}}>
+                  <PersonaAvatar id={p.id} size={22} />
+                  <span>{p.label}{desktop ? ` · ${p.org}` : ''}</span>
+                </Box>
               </MenuItem>
             ))}
           </TextField>

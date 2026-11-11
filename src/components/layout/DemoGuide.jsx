@@ -12,18 +12,17 @@ import InsightsOutlined from '@mui/icons-material/InsightsOutlined';
 import ArrowForward from '@mui/icons-material/ArrowForward';
 import {useDemo} from '../../shared/hooks/useDemoStore';
 import {FLOWS, GUIDE_STEPS, INTRO, PERSONA_CARDS} from '../../shared/constants/guide';
+import {personaTone} from '../../styles/tokens';
+import PersonaAvatar from '../ui/PersonaAvatar';
+import SwapHoriz from '@mui/icons-material/SwapHoriz';
 
 const SEEN_KEY = 'mc_tour_seen_v2';
 const PAD = 6;
 const CARD_H = 400;
 const STOPS = GUIDE_STEPS.length - 1; // intro is not a numbered stop
 
-// One colour per persona so a reviewer can tell the three flows apart at a glance.
-export const PERSONA_TONE = {
-  groupAdmin: {fg: 'primary.main', bg: 'primary.light'},
-  practice: {fg: 'secondary.main', bg: 'secondary.light'},
-  payerOps: {fg: 'grey.800', bg: 'grey.100'},
-};
+// One colour family per persona / flow (see styles/tokens.js).
+const PERSONA_TONE = personaTone;
 
 const matches = (route, path) => (route.startsWith('/attest/') ? path.startsWith('/attest/') : route === path);
 const readSeen = () => { try { return window.localStorage.getItem(SEEN_KEY) === '1'; } catch { return true; } };
@@ -63,7 +62,7 @@ function useTarget(target, enabled, key) {
   return [el, rect];
 }
 
-function Spotlight({rect}) {
+function Spotlight({rect, color}) {
   if (!rect) return null;
   return (
     <Box
@@ -71,7 +70,7 @@ function Spotlight({rect}) {
       sx={{
         position: 'fixed', pointerEvents: 'none', zIndex: (t) => t.zIndex.modal - 1,
         top: rect.top - PAD, left: rect.left - PAD, width: rect.width + PAD * 2, height: rect.height + PAD * 2,
-        borderRadius: 1.5, outline: '2px solid', outlineColor: 'primary.main',
+        borderRadius: 1.5, outline: '3px solid', outlineColor: color ?? 'primary.main',
         boxShadow: '0 0 0 9999px rgba(23, 32, 42, 0.42)', transition: 'all 220ms ease',
       }}
     />
@@ -89,7 +88,7 @@ function PositioningMatrix() {
       <Box
         key={`${y}-${x}`}
         sx={{
-          p: 1, minHeight: 58, borderRadius: 1, display: 'flex', flexDirection: 'column', gap: 0.75, justifyContent: 'center',
+          p: 1, minHeight: 52, borderRadius: 1, display: 'flex', flexDirection: 'column', gap: 0.75, justifyContent: 'center',
           bgcolor: us ? 'secondary.light' : 'grey.50', border: '1px solid', borderColor: us ? 'secondary.main' : 'divider',
           borderWidth: us ? 2 : 1,
         }}
@@ -164,17 +163,30 @@ function IntroCard({onStart, onExplore}) {
           <PositioningMatrix />
         </Box>
 
-        <Typography variant="overline" color="text.secondary" component="div" sx={{mb: 1}}>Three personas, three flows (you will play each one)</Typography>
+        <Box sx={{display: 'flex', alignItems: 'baseline', gap: 1.5, flexWrap: 'wrap', mb: 1}}>
+          <Typography variant="overline" color="text.secondary" component="div">Three personas, three flows (you will play each one)</Typography>
+          <Typography variant="caption" color="text.secondary" sx={{display: 'inline-flex', alignItems: 'center', gap: 0.5}}>
+            <SwapHoriz sx={{fontSize: 16, flexShrink: 0}} /><span>Switch persona any time from the <b>Persona</b> menu at the top right</span>
+          </Typography>
+        </Box>
         <Box sx={{display: 'grid', gridTemplateColumns: {xs: '1fr', md: 'repeat(3, 1fr)'}, gap: 1.5, mb: 1.75}}>
           {PERSONA_CARDS.map((p) => {
             const tone = PERSONA_TONE[p.id];
             const flow = FLOWS[p.flow];
             return (
-              <Box key={p.id} sx={{border: '1px solid', borderColor: 'divider', borderTop: '3px solid', borderTopColor: tone.fg, borderRadius: 1, p: 1.25}}>
-                <Typography variant="caption" sx={{color: tone.fg, fontWeight: 600}}>FLOW {flow.n} · {flow.label}</Typography>
-                <Typography variant="body2" sx={{mt: 0.25, mb: 0.75}}><b>{p.name}</b> <Box component="span" sx={{color: 'text.secondary'}}>· {p.role}</Box></Typography>
-                <Typography variant="body2"><b>Pain:</b> {p.pain}</Typography>
-                <Typography variant="body2" sx={{mt: 0.25}}><b>Win:</b> {p.win}</Typography>
+              <Box key={p.id} sx={{border: '1px solid', borderColor: tone.fg, borderTop: '4px solid', borderTopColor: tone.fg, borderRadius: 1, overflow: 'hidden'}}>
+                <Box sx={{bgcolor: tone.bg, px: 1.25, py: 1, display: 'flex', gap: 1.25, alignItems: 'center'}}>
+                  <PersonaAvatar id={p.id} size={46} />
+                  <Box sx={{minWidth: 0}}>
+                    <Typography variant="caption" sx={{color: tone.fg, fontWeight: 600, display: 'block', lineHeight: 1.3}}>FLOW {flow.n} · {flow.label}</Typography>
+                    <Typography sx={{fontSize: '1.25rem', fontWeight: 700, color: tone.fg, lineHeight: 1.2}}>{p.name}</Typography>
+                    <Typography variant="caption" color="text.secondary" sx={{display: 'block', lineHeight: 1.3}}>{p.role}</Typography>
+                  </Box>
+                </Box>
+                <Box sx={{px: 1.25, py: 1}}>
+                  <Typography variant="body2"><b>Pain:</b> {p.pain}</Typography>
+                  <Typography variant="body2" sx={{mt: 0.25}}><b>Win:</b> {p.win}</Typography>
+                </Box>
               </Box>
             );
           })}
@@ -203,10 +215,11 @@ function FlowPills({current}) {
         return (
           <Chip
             key={key}
+            avatar={<Box sx={{display: 'flex', bgcolor: 'transparent !important'}}><PersonaAvatar id={f.persona} size={18} /></Box>}
             label={`${f.n} ${cardFor(f.persona).name}`}
             size="small"
             aria-current={on ? 'step' : undefined}
-            sx={{height: 22, fontWeight: on ? 600 : 400, bgcolor: on ? tone.bg : 'transparent', color: on ? tone.fg : 'text.secondary', border: '1px solid', borderColor: on ? tone.fg : 'divider'}}
+            sx={{height: 24, opacity: on ? 1 : 0.6, fontWeight: on ? 700 : 400, bgcolor: on ? tone.bg : 'transparent', color: on ? tone.fg : 'text.secondary', border: '1px solid', borderColor: on ? tone.fg : 'divider'}}
           />
         );
       })}
@@ -226,26 +239,42 @@ function StepCard({step, index, onBack, onNext, onMin, onExit, last}) {
         <Tooltip title="Minimise"><IconButton size="small" aria-label="Minimise tour" onClick={onMin}><Remove fontSize="small" /></IconButton></Tooltip>
         <Tooltip title="Exit tour"><IconButton size="small" aria-label="Exit tour" onClick={onExit}><Close fontSize="small" /></IconButton></Tooltip>
       </Box>
-      <LinearProgress variant="determinate" value={(index / STOPS) * 100} aria-hidden sx={{mb: 1.25, height: 3, borderRadius: 2}} />
-
-      <Typography variant="caption" sx={{color: tone.fg, fontWeight: 600, display: 'block'}}>
-        FLOW {flow.n} · {flow.label.toUpperCase()}
-      </Typography>
+      <LinearProgress
+        variant="determinate"
+        value={(index / STOPS) * 100}
+        aria-hidden
+        sx={{mb: 1.25, height: 4, borderRadius: 2, bgcolor: tone.bg, '& .MuiLinearProgress-bar': {bgcolor: tone.fg}}}
+      />
 
       {step.meet ? (
-        <Box sx={{bgcolor: tone.bg, borderRadius: 1, p: 1.25, my: 1}}>
-          <Typography variant="body2" sx={{fontWeight: 600, color: tone.fg}}>You are now {persona.name}</Typography>
-          <Typography variant="caption" color="text.secondary" sx={{display: 'block', mb: 0.5}}>{persona.role}</Typography>
+        <Box sx={{bgcolor: tone.bg, borderRadius: 1, p: 1.25, mb: 1.25, border: '1px solid', borderColor: tone.fg}}>
+          <Box sx={{display: 'flex', gap: 1.25, alignItems: 'center', mb: 0.75}}>
+            <PersonaAvatar id={step.persona} size={48} />
+            <Box>
+              <Typography variant="caption" sx={{color: tone.fg, fontWeight: 600, display: 'block', lineHeight: 1.3}}>FLOW {flow.n} · {flow.label.toUpperCase()}</Typography>
+              <Typography sx={{fontSize: '1.2rem', fontWeight: 700, color: tone.fg, lineHeight: 1.2}}>You are now {persona.name}</Typography>
+              <Typography variant="caption" color="text.secondary" sx={{display: 'block', lineHeight: 1.3}}>{persona.role}</Typography>
+            </Box>
+          </Box>
           <Typography variant="body2"><b>Pain:</b> {persona.pain}</Typography>
+          <Typography variant="caption" color="text.secondary" sx={{display: 'flex', alignItems: 'center', gap: 0.5, mt: 0.5}}>
+            <SwapHoriz sx={{fontSize: 14, flexShrink: 0}} /><span>Persona switched for you. You can also change it from the <b>Persona</b> menu at the top.</span>
+          </Typography>
         </Box>
       ) : (
-        <Typography variant="caption" color="text.secondary" sx={{display: 'block', mb: 0.5}}>As {persona.name}, {persona.role.split(',')[0]}</Typography>
+        <Box sx={{display: 'flex', alignItems: 'center', gap: 1, mb: 0.75}}>
+          <PersonaAvatar id={step.persona} size={28} />
+          <Typography variant="body2" sx={{lineHeight: 1.3}}>
+            <Box component="span" sx={{color: tone.fg, fontWeight: 700}}>{persona.name}</Box>
+            <Box component="span" sx={{color: 'text.secondary'}}> · Flow {flow.n}: {flow.label}</Box>
+          </Typography>
+        </Box>
       )}
 
       <Typography variant="h3" sx={{mb: 0.5}}>{step.title}</Typography>
       <Typography variant="body2" color="text.secondary" sx={{mb: 1}} aria-live="polite">{step.what}</Typography>
       <Box sx={{display: 'flex', gap: 0.75, mb: 0.75}}>
-        <LightbulbOutlined sx={{fontSize: 16, mt: '2px', color: 'primary.main'}} />
+        <LightbulbOutlined sx={{fontSize: 16, mt: '2px', color: tone.fg}} />
         <Typography variant="body2"><b>Why:</b> {step.why}</Typography>
       </Box>
       <Box sx={{display: 'flex', gap: 0.75, color: 'secondary.main', mb: 1.5}}>
@@ -255,8 +284,8 @@ function StepCard({step, index, onBack, onNext, onMin, onExit, last}) {
 
       <Box sx={{display: 'flex', gap: 1, alignItems: 'center'}}>
         <Typography variant="caption" color="text.secondary" sx={{mr: 'auto'}}>Stop {index} of {STOPS}</Typography>
-        <Button onClick={onBack}>Back</Button>
-        <Button variant="contained" onClick={onNext}>{last ? 'Finish' : 'Next'}</Button>
+        <Button onClick={onBack} sx={{color: tone.fg}}>Back</Button>
+        <Button variant="contained" onClick={onNext} sx={{bgcolor: tone.fg, '&:hover': {bgcolor: tone.fg, filter: 'brightness(0.9)'}}}>{last ? 'Finish' : 'Next'}</Button>
       </Box>
     </>
   );
@@ -335,7 +364,8 @@ export default function DemoGuide() {
   const card = (
     <StepCard step={step} index={stepIndex} last={last} onBack={() => goTo(stepIndex - 1)} onNext={next} onMin={() => setMin(true)} onExit={exit} />
   );
-  const cardSx = {p: 2, borderColor: 'primary.main', borderWidth: 1, boxShadow: (t) => t.shadows[8]};
+  const tone = PERSONA_TONE[step.persona];
+  const cardSx = {p: 2, borderColor: tone.fg, borderWidth: 1, borderTop: '5px solid', borderTopColor: tone.fg, boxShadow: (t) => t.shadows[8]};
 
   // Anchor to the control when there is room; big targets and phones get a docked panel instead.
   const fitsAnchored = rect && rect.height < window.innerHeight * 0.4
@@ -344,7 +374,7 @@ export default function DemoGuide() {
   if (wide && anchor && fitsAnchored) {
     return (
       <>
-        <Spotlight rect={rect} />
+        <Spotlight rect={rect} color={tone.fg} />
         <Popper
           open
           anchorEl={anchor}
@@ -373,7 +403,7 @@ export default function DemoGuide() {
                     borderTop: placement.startsWith('bottom') || placement.startsWith('left') ? '1px solid' : 0,
                     borderRight: placement.startsWith('top') || placement.startsWith('left') ? '1px solid' : 0,
                     borderBottom: placement.startsWith('top') || placement.startsWith('right') ? '1px solid' : 0,
-                    borderColor: 'primary.main',
+                    borderColor: tone.fg,
                   },
                 }}
               />
@@ -387,7 +417,7 @@ export default function DemoGuide() {
 
   return (
     <>
-      <Spotlight rect={rect} />
+      <Spotlight rect={rect} color={tone.fg} />
       <Paper
         role="dialog"
         aria-label="Guided tour"
