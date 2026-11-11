@@ -58,7 +58,7 @@ export default function DropPage() {
   }, [phase]);
 
   useEffect(() => {
-    if (phase === 4 && state.intake) notify(`Pre-flight complete: ${state.intake.result.exceptions.length} exceptions need you`, 'info');
+    if (phase === 4 && state.intake) { const n = state.intake.result.exceptions.length; notify(`Pre-flight complete: ${n} exception${n === 1 ? ' needs' : 's need'} you`, 'info'); }
   }, [phase === 4]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const runSample = async () => {
@@ -196,7 +196,7 @@ export default function DropPage() {
                     {state.intake.result.stats.touchlessRows} of {state.intake.result.stats.totalRows} rows passed with no human touch
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    Detected group: {state.intake.result.groupName}. {state.intake.result.exceptions.length} exceptions need review.
+                    Detected group: {state.intake.result.groupName}. {state.intake.result.exceptions.length} exception(s) need review.
                   </Typography>
                 </Box>
                 <Button variant="contained" endIcon={<ArrowForward />} component={RouterLink} to="/intake/mapping">Review mapping</Button>
