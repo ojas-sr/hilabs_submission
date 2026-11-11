@@ -81,7 +81,7 @@ export default function SubmitPage() {
         </Alert>
       )}
 
-      <Grid container spacing={2}>
+      <Grid container data-tour="payers" spacing={2}>
         {PAYERS.map((p, i) => {
           const r = submission?.results.find((x) => x.payerId === p.id);
           const pending = submission && routing <= i;

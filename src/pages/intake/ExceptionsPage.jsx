@@ -118,7 +118,7 @@ export default function ExceptionsPage() {
           <ToggleButton value="low">Low</ToggleButton>
         </ToggleButtonGroup>
         <Box sx={{flex: 1}} />
-        <Button variant="contained" color="success" startIcon={<DoneAll />} disabled={!bulkable.length || locked} onClick={bulk}>
+        <Button data-tour="bulk" variant="contained" color="success" startIcon={<DoneAll />} disabled={!bulkable.length || locked} onClick={bulk}>
           Accept all High-confidence ({bulkable.length})
         </Button>
       </Box>

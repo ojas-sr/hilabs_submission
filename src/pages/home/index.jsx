@@ -64,7 +64,7 @@ export default function HomePage() {
         </Alert>
       )}
 
-      <Grid container spacing={2} sx={{mb: 2}}>
+      <Grid container data-tour="kpis" spacing={2} sx={{mb: 2}}>
         <Grid size={{xs: 12, sm: 6, lg: 3}}>
           <KpiTile label="Touchless auto-adjudication" value={pct(touchless)} target="≥ 80%" onTarget={touchless >= 0.8}
             helper={sub ? `Latest submission · ${sub.rowCount} rows` : 'Rows passing with no human touch, last 30 days'} />

@@ -38,7 +38,7 @@ export default function AttestationPage() {
                 everything from NPPES and DataSpring and found <strong>4 possible changes</strong>. Please confirm or correct them.
                 One confirmation covers all three health plans.
               </Typography>
-              <Button variant="contained" size="medium" endIcon={<OpenInNew />} component={RouterLink} to={`/attest/${MAGIC_TOKEN}`} sx={{mb: 1.5}}>
+              <Button data-tour="magic" variant="contained" size="medium" endIcon={<OpenInNew />} component={RouterLink} to={`/attest/${MAGIC_TOKEN}`} sx={{mb: 1.5}}>
                 Review &amp; attest
               </Button>
               <Typography variant="body2" color="text.secondary" sx={{display: 'flex', gap: 0.5, alignItems: 'center', wordBreak: 'break-all'}}>

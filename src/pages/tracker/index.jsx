@@ -97,7 +97,7 @@ export default function TrackerPage() {
         title="Claims-Ready tracker"
         subtitle={`${sub.id} · submitted ${formatDateTime(sub.submittedAt)}. See when each doctor can bill, per payer, against the 2-business-day directory SLA. Timestamps are simulated from payer ack files.`}
         actions={(
-          <Button variant="contained" startIcon={<MoveToInbox />} disabled={allLive} onClick={() => { ack(); notify('Payer ack file processed: statuses advanced', 'info'); }}>
+          <Button data-tour="ack" variant="contained" startIcon={<MoveToInbox />} disabled={allLive} onClick={() => { ack(); notify('Payer ack file processed: statuses advanced', 'info'); }}>
             {allLive ? 'All payers live' : 'Simulate payer ack file'}
           </Button>
         )}

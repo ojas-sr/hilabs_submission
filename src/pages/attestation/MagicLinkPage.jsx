@@ -164,7 +164,7 @@ export default function MagicLinkPage() {
                 );
               })}
             </Stack>
-            <Paper sx={{p: 2, mt: 2, display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap', position: 'sticky', bottom: 8}}>
+            <Paper data-tour="attest" sx={{p: 2, mt: 2, display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap', position: 'sticky', bottom: 8}}>
               <Typography variant="body2" color="text.secondary" sx={{flex: 1, minWidth: 220}}>
                 By attesting you confirm this data is accurate as of today for all listed plans (No Surprises Act 90-day verification).
               </Typography>

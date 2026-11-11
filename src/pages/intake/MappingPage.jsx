@@ -52,7 +52,7 @@ export default function MappingPage() {
           because every value is a 2-letter code.
         </Alert>
       )}
-      <Paper>
+      <Paper data-tour="mapping">
         <TableContainer>
           <Table aria-label="Column mapping" sx={{minWidth: 820}}>
             <TableHead>

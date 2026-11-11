@@ -67,7 +67,7 @@ export default function AuditPage() {
         actions={(
           <>
             <Button variant="outlined" startIcon={<BugReportOutlined />} onClick={runTamper}>Simulate tamper</Button>
-            <Button variant="contained" startIcon={<VerifiedUserOutlined />} onClick={runVerify}>Verify chain</Button>
+            <Button data-tour="verify" variant="contained" startIcon={<VerifiedUserOutlined />} onClick={runVerify}>Verify chain</Button>
           </>
         )}
       />

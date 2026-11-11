@@ -56,7 +56,7 @@ export default function PayerOpsPage() {
           </Paper>
         </Grid>
         <Grid size={{xs: 12, lg: 7}}>
-          <Paper>
+          <Paper data-tour="queue">
             <Box sx={{px: 2, py: 1.5}}>
               <Typography variant="h3">Exception queue</Typography>
               <Typography variant="body2" color="text.secondary">Escalated by providers or held by Northwind rules</Typography>

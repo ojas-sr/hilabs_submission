@@ -125,7 +125,7 @@ export default function DropPage() {
             <input ref={inputRef} type="file" accept=".csv,.txt,.xlsx,.xls" hidden aria-hidden onChange={(e) => { handleFiles(e.target.files); e.target.value = ''; }} />
           </Paper>
           <Box sx={{display: 'flex', alignItems: 'center', gap: 1.5, mt: 2, flexWrap: 'wrap'}}>
-            <Button variant="contained" startIcon={<AutoAwesomeOutlined />} onClick={runSample} disabled={running}>
+            <Button data-tour="sample" variant="contained" startIcon={<AutoAwesomeOutlined />} onClick={runSample} disabled={running}>
               Use sample messy roster
             </Button>
             <Link href={`${import.meta.env.BASE_URL}${sample.path}`} download variant="body2">
