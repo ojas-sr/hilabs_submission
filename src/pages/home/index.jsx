@@ -60,7 +60,7 @@ export default function HomePage() {
           sx={{mb: 2}}
           action={<Button color="inherit" onClick={startDemo}>Start (2 min)</Button>}
         >
-          New here? The guided demo walks through intake, exceptions, payer routing, tracking, attestation, audit and payer ops.
+          New here? A 2-minute tour explains why this product exists, where it is positioned, and the 3 personas it serves: a large group, a small practice and the health plan.
         </Alert>
       )}
 
